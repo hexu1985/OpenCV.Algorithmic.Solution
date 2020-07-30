@@ -10,6 +10,7 @@ if __name__ == "__main__":
         image = cv2.imread(sys.argv[1], cv2.IMREAD_COLOR)
     else:
         print("Usage: python RGB.py imageFile")
+        sys.exit(1)
 
     # 显示彩色图像
     cv2.imshow("bgr", image)
