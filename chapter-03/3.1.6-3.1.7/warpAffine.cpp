@@ -6,19 +6,19 @@ using namespace cv;
 
 int main(int argc, char* argv[])
 {
-	//ÊäÈëÍ¼Ïñ
+	//è¾“å…¥å›¾åƒ
 	Mat I = imread(argv[1], IMREAD_GRAYSCALE);
 
 	if (!I.data)
 		return -1;
 
-	/*µÚÒ»ÖÖ·½Ê½£ºÀûÓÃ warpAffine ½øĞĞËõ·Å*/
-	//Ëõ·Å·ÂÉä¾ØÕó£¬µÈ±ÈÀıËõĞ¡2±¶
+    /*ç¬¬ä¸€ç§æ–¹å¼ï¼šåˆ©ç”¨ warpAffine è¿›è¡Œç¼©æ”¾*/
+    //ç¼©æ”¾ä»¿å°„çŸ©é˜µï¼Œç­‰æ¯”ä¾‹ç¼©å°2å€
 	Mat s = (Mat_<float>(2, 3) << 0.5, 0, 0, 0, 0.5, 0);
 	Mat dst1;
-	warpAffine(I, dst1,s,Size(I.cols/2,I.rows/2));//Í¼ÏñËõ·Å
+	warpAffine(I, dst1,s,Size(I.cols/2,I.rows/2));  //å›¾åƒç¼©æ”¾
 
-	/*µÚ¶şÖÖ·½Ê½£ºÀûÓÃ resize µÈ±ÈÀıËõĞ¡Á½±¶*/
+    /*ç¬¬äºŒç§æ–¹å¼ï¼šåˆ©ç”¨ resize ç­‰æ¯”ä¾‹ç¼©å°ä¸¤å€*/
 	Mat dst2;
 	resize(I, dst2, Size(I.cols / 2, I.rows / 2), 0.5, 0.5);
 

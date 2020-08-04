@@ -1,45 +1,49 @@
 #include<opencv2/core/core.hpp>
 #include<opencv2/imgproc/imgproc.hpp>
 #include<opencv2/highgui/highgui.hpp>
-using namespace cv;
 #include<iostream>
+
+using namespace cv;
 using namespace std;
-Mat I;//Ô­Í¼
-Mat pI;//Í¶Ó°±ä»»ºóµÄÍ¼
+
+Mat I;//åŸå›¾
+Mat pI;//æŠ•å½±å˜æ¢åçš„å›¾
 Point2f IPoint,pIPoint;
 int i = 0,j = 0;
-Point2f src[4];//´æ´¢Ô­×ø±ê
-Point2f dst[4];//´æ´¢¶ÔÓ¦±ä»»µÄ×ø±ê
-//Í¨¹ıÒÔÏÂÊó±êÊÂ¼ş£¬ÔÚÔ­Í¼ÖĞÈ¡ËÄ¸ö×ø±ê
+Point2f src[4];//å­˜å‚¨åŸåæ ‡
+Point2f dst[4];//å­˜å‚¨å¯¹åº”å˜æ¢çš„åæ ‡
+
+//é€šè¿‡ä»¥ä¸‹é¼ æ ‡äº‹ä»¶ï¼Œåœ¨åŸå›¾ä¸­å–å››ä¸ªåæ ‡
 void mouse_I(int event, int x, int y, int flags, void *param)
 {
 	switch (event)
 	{
 	case CV_EVENT_LBUTTONDOWN:
-		//¼ÇÂ¼×ø±ê
+		//è®°å½•åæ ‡
 		IPoint = Point2f(x, y);
 		break;
 	case CV_EVENT_LBUTTONUP:
 		src[i] = IPoint;
-		circle(I, src[i], 7, Scalar(0),3);//±ê¼Ç
+		circle(I, src[i], 7, Scalar(0),3);//æ ‡è®°
 		i += 1;
 		break;
 	default:
 		break;
 	}
 }
-//Í¨¹ıÒÔÏÂÊó±êÊÂ¼ş£¬ÒªÊä³öµÄÍ¼ÖĞÈ¡ËÄ¸ö×ø±ê
+
+//é€šè¿‡ä»¥ä¸‹é¼ æ ‡äº‹ä»¶ï¼Œè¦è¾“å‡ºçš„å›¾ä¸­å–å››ä¸ªåæ ‡
 void mouse_pI(int event, int x, int y, int flags, void *param)
 {
 	switch (event)
 	{
 	case CV_EVENT_LBUTTONDOWN:
-		//¼ÇÂ¼×ø±ê
+		//è®°å½•åæ ‡
 		pIPoint = Point2f(x, y);
 		break;
 	case CV_EVENT_LBUTTONUP:
 		dst[j] = pIPoint;
-		circle(pI, dst[j], 7, Scalar(0), 3);//±ê¼Ç
+		circle(pI, dst[j], 7, Scalar(0), 3);//æ ‡è®°
 		j += 1;
 		break;
 	default:
@@ -49,16 +53,16 @@ void mouse_pI(int event, int x, int y, int flags, void *param)
 
 int main(int argc, char*argv[])
 {
-	//ÊäÈëÔ­Í¼
-	I = imread(argv[1], IMREAD_GRAYSCALE);
+	//è¾“å…¥åŸå›¾
+	I = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 	if (!I.data)
 		return 0;
-	//Êä³öÍ¼Ïñ
+	//è¾“å‡ºå›¾åƒ
 	pI = 200 * Mat::ones(I.size(), CV_8UC1);
-	//ÔÚÔ­Í¼´°¿ÚÉÏ£¬¶¨ÒåÊó±êÊÂ¼ş
+	//åœ¨åŸå›¾çª—å£ä¸Šï¼Œå®šä¹‰é¼ æ ‡äº‹ä»¶
 	namedWindow("I", 1);
 	setMouseCallback("I", mouse_I, NULL);
-	//ÔÚÊä³ö´°¿ÚÉÏ£¬¶¨ÒåÊó±êÊÂ¼ş
+	//åœ¨è¾“å‡ºçª—å£ä¸Šï¼Œå®šä¹‰é¼ æ ‡äº‹ä»¶
 	namedWindow("pI", 1);
 	setMouseCallback("pI", mouse_pI, NULL);
 	imshow("I", I);
@@ -74,16 +78,17 @@ int main(int argc, char*argv[])
 	imshow("pI", pI);
 	imwrite("I.jpg", I);
 	imwrite("pI.jpg", pI);
-	//ÒÆ³ıÊó±êÊÂ¼ş 
+	//ç§»é™¤é¼ æ ‡äº‹ä»¶ 
 	setMouseCallback("I", NULL, NULL);
 	setMouseCallback("pI", NULL, NULL);
-	//¼ÆËãÍ¶Ó°±ä»»¾ØÕó
+	//è®¡ç®—æŠ•å½±å˜æ¢çŸ©é˜µ
 	Mat p = getPerspectiveTransform(src, dst);
-	//Í¶Ó°±ä»»
+	//æŠ•å½±å˜æ¢
 	Mat result;
 	warpPerspective(I, result, p, pI.size());
-	imshow("Í¶Ó°ºóµÄĞ§¹û", result);
+	imshow("æŠ•å½±åçš„æ•ˆæœ", result);
 	imwrite("result.jpg", result);
 	waitKey(0);
 	return 0;
 }
+
