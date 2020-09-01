@@ -11,9 +11,9 @@ cv::Mat contrastImage;//输出图像
 //图像的宽高
 int height;
 int width;
-int value = 16;
+int value = 40;
 float segValue = 40.0;
-const int MAX_VALUE = 120;
+const int MAX_VALUE = 200;
 std::string contrastWindow = "对比度";
 
 void callback_value(int, void*)
@@ -21,16 +21,20 @@ void callback_value(int, void*)
 	//这里 gamma 的取值范围为 [0，3]
 	float gamma = float(value) / segValue;
 	//调整对比度
+#if 1
+	contrastImage = cv::Mat::zeros(image.size(), CV_32FC1);
 	for (int r = 0; r < height; r++)
 	{
 		for (int c = 0; c < width; c++)
 		{
-			float pixel = powf(image_0_1.at<float>(r, c), gamma);
+			float pixel = pow(image_0_1.at<float>(r, c), gamma);
 			contrastImage.at<float>(r, c) = pixel;
 		}
 	}
+#else
 	//或者直接采用 OpenCV 提供的 pow函数
-	//cv::pow(image_0_1, gamma, contrastImage);
+	cv::pow(image_0_1, gamma, contrastImage);
+#endif
 	//显示调整对比度后的效果
 	cv::imshow(contrastWindow, contrastImage);
 	/*保存结果*/
